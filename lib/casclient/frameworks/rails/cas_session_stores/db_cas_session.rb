@@ -1,8 +1,13 @@
 module CasSessionStore
   module DbCasSession
     def self.included(base)
-      Object.const_set(:CasSession, Class.new(ActiveRecord::Base)) unless Object.const_defined?(:CasSession)
-      base.extend(ClassMethods)
+      cas_session_model_path = "#{Rails.root}/app/models/cas_session.rb"
+      if File.exists?(cas_session_model_path)
+        require cas_session_model_path
+      else
+        Object.const_set(:CasSession, Class.new(ActiveRecord::Base)) unless Object.const_defined?(:CasSession)
+        base.extend(ClassMethods)
+      end
     end
 
     module ClassMethods
